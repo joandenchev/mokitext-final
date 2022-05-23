@@ -11,39 +11,60 @@
 			crossorigin="anonymous"
 		/>
 		<link rel="stylesheet" href="css/style.css" />
-		<title>ChatCord App</title>
+		<script src="js/toRoom.js"></script>
+		<title>Mokitext</title>
 	</head>
 	<body>
 		<div class="join-container">
 			<header class="join-header">
-				<h1><i class="fas fa-smile"></i> ChatCord</h1>
+				<h1>Mokitext</h1>
 			</header>
 			<main class="join-main">
-				<form action="chat.html">
-					<div class="form-control">
-						<label for="username">Username</label>
-						<input
-							type="text"
-							name="username"
-							id="username"
-							placeholder="Enter username..."
-							required
-						/>
-					</div>
+				<h2 class="head-2" id="hiName"></h2>
+				<form>
 					<div class="form-control">
 						<label for="room">Room</label>
-						<select name="room" id="room">
-							<option value="JavaScript">JavaScript</option>
-							<option value="Python">Python</option>
-							<option value="PHP">PHP</option>
-							<option value="C#">C#</option>
-							<option value="Ruby">Ruby</option>
-							<option value="Java">Java</option>
-						</select>
+						<input type="text" name="room" id="room" placeholder="Choose your interest...">
 					</div>
 					<button type="submit" class="btn">Join Chat</button>
+					<button type="button" class="btn" id="logout" style="background-color: var(--error-color)">Log out</button>
 				</form>
 			</main>
 		</div>
+		<script>
+			document.getElementById('hiName').innerHTML = 'Hello, ' + localStorage.getItem('currentUsername') + '!'
+			document.getElementsByTagName('form')[0].addEventListener('submit', (e) => joinChat(e))
+			document.getElementById('logout').addEventListener('click', () => logout())
+
+			function joinChat(e) {
+				e.preventDefault()
+				const chat = e.target.elements.room.value
+				localStorage.setItem('mokiChat', chat)
+				fetch('http://localhost:3000/lookup', {
+					method: 'POST',
+					mode: 'cors',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({chat: chat})
+				})
+				window.location.href = 'http://localhost:3000/chat.html'
+			}
+
+			function logout() {
+				fetch('http://localhost:6305/register', {
+					method: 'DELETE',
+					mode: 'cors',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({token: tokenR})
+
+				})
+				localStorage.clear()
+				window.location.href = 'http://localhost:3000/'
+			}
+
+		</script>
 	</body>
 </html>

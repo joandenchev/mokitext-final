@@ -1,11 +1,20 @@
-const moment = require('moment');
+import moment from "moment";
 
-function formatMessage(username, text) {
-  return {
-    username,
-    text,
-    time: moment().format('h:mm a')
-  };
+export default class Message {
+  time; text; sender;
+  constructor(sender, text) {
+    this.time = moment().format('h:mm a')
+    this.text  = text;
+    this.sender = sender;
+  }
 }
-
-module.exports = formatMessage;
+export class ChatRoom {
+  id
+  name
+  messages
+  constructor(id, name) {
+    this.id = id;
+    this.name = name;
+    this.messages = []
+  }
+}
